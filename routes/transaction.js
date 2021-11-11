@@ -6,32 +6,19 @@ const Payer = require("../models/Payer");
 const SpendPoints = require("../helper/spendPoints");
 
 /**
- * Create a new transaction log
+ * @route POST /transaction/addPoints
+ * @desc Given a transaction, add points to it's payer if already exists.
+ * If it doesn't exist, create the payer profile
+ * @access Public
  */
-router.post("/transaction/create", async (req, res) => {
-  console.log(req.body);
-
-  let { payer, points, timestamp } = req.body;
-
-  transaction_arr = await transactionRepo.getAll();
-  // Get the transaction array
-
-  transactionRepo.create(new Transaction(payer, points, timestamp));
-
-  return res.status(201).json({ data: "Persisted transaction" });
-});
-
-/**
- * Given a transaction, add points to it's payer if already exists. If it doesn't exist
- */
-router.post("/transaction/addpoints", async (req, res) => {
-  console.log(req.body);
+router.post("/transaction/addPoints", async (req, res) => {
+  // console.log(req.body);
   let transaction = req.body;
   // See if we already have the data for a given payer/partner
   retrieved_payer = await payerRepo.getPayer(transaction.payer);
 
   // If the payer/partner exists, update the balance amount
-  // If the payer/partner does not exist, make a new payer and set it points
+  // If the payer/partner does not exist, make a new payer profile and set it points
   if (retrieved_payer) {
     await payerRepo.update(retrieved_payer.id, {
       points: retrieved_payer.points + transaction.points,
@@ -55,22 +42,22 @@ router.post("/transaction/addpoints", async (req, res) => {
     .json({ message: "Persisted transaction and updated payer" });
 });
 
-/*
-  User spend points, decide which points to withdraw from
-*/
-router.put("/spendPoints", async (req, res) => {
-  pointsSortedByDescDate = await transactionRepo.getRecentPoints();
+/**
+ * @route PUT /user/spendPoints
+ * @desc User spend points, but backend decides which points to withdraw from
+ * Points should be withdrawn from the oldest dates, do not dip below 0 for any payer
+ * @access Public
+ */
+router.put("/user/spendPoints", async (req, res) => {
+  pointsSortedByOldestDate = await transactionRepo.getPoints();
   // console.log(req.body);
-  // console.log(pointsSortedAscendByDate);
   let withdraw_points = req.body.points;
   let spendPoints = new SpendPoints();
-  // console.log(pointsSortedByDescDate);
-  // return;
-  // console.log(spendPoints);
+  // console.log(pointsSortedByOldestDate);
 
   // Determine which payers/parteners to deduct from
-  for (let i = 0; i < pointsSortedByDescDate.length; i++) {
-    let transaction = pointsSortedByDescDate[i];
+  for (let i = 0; i < pointsSortedByOldestDate.length; i++) {
+    let transaction = pointsSortedByOldestDate[i];
     // Used up all desired spend points
     if (withdraw_points <= 0) {
       break;
@@ -107,11 +94,13 @@ router.put("/spendPoints", async (req, res) => {
 });
 
 /**
- * Retrieve the point balance of all payers
+ * @route GET /payer/allBalances
+ * @desc Retrieve the point balance of all payers
+ * @access Public
  */
 router.get("/payer/allBalances", async (req, res) => {
   allPayerBalances = await payerRepo.getAll();
-  console.log(allPayerBalances);
+  // console.log(allPayerBalances);
   return res.status(201).json({ data: allPayerBalances });
 });
 

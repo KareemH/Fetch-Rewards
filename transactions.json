@@ -1,14 +1,3 @@
 [
-  {
-    "payer": "DANNON",
-    "points": 1000,
-    "timestamp": "2020-11-02T14:00:00Z",
-    "id": "e5b69a3b"
-  },
-  {
-    "payer": "MILLER COORS",
-    "points": 5300,
-    "timestamp": "2020-11-01T14:00:00Z",
-    "id": "4c88c85c"
-  }
+
 ]

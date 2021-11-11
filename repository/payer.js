@@ -1,6 +1,4 @@
 const Repository = require("./repository");
-const { updatePoints } = require("./transaction");
-
 class PayerRepository extends Repository {
   /*
     payer: string
