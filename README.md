@@ -68,3 +68,9 @@ curl -GET localhost:5000/payer/allBalances
 The output should be `{"data":[{"payer":"DANNON","points":1000,"id":"c0fd7742"},{"payer":"UNILEVER","points":0,"id":"593c2c4a"},{"payer":"MILLER COORS","points":5300,"id":"7833c9db"}]} ` (note that ids will vary since they are randomly generated, this is not a concern).
 
 Feel free to check out the `/payer.json` and `/transaction.json` files to see how the update overtime as you run these commands.
+
+Note: if you want to start over, empty out `/payer.json` and `/transaction.json` by deleting the contents within the array (**but NOT the array itself**)
+
+### Next Steps
+- Maintaining sessions for each user
+- Front-end implementation (better workflow with a JavaScript backend)
