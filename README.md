@@ -71,6 +71,6 @@ Feel free to check out the `/payer.json` and `/transaction.json` files to see ho
 
 Note: if you want to start over, empty out `/payer.json` and `/transaction.json` by deleting the contents within the array (**but NOT the array itself**)
 
-### Next Steps
+## Next Steps
 - Maintaining sessions for each user
 - Front-end implementation (better workflow with a JavaScript backend)
